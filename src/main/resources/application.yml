@@ -1,0 +1,81 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: personalTool-backend
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/personal_tool?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:password}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # Caffeine缓存配置
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=10m
+
+# MyBatis Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  mapper-locations: classpath*:/mapper/**/*.xml
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-change-in-production-32-chars}
+  expiration: 86400000 # 24小时，单位：毫秒
+
+# 加密配置
+app:
+  encryption:
+    key: ${APP_ENCRYPTION_KEY:your-encryption-key-32-chars-long}
+
+# Python服务地址
+python:
+  service:
+    url: ${PYTHON_SERVICE_URL:http://python-service:8000}
+
+# Knife4j配置
+knife4j:
+  enable: true
+  openapi:
+    title: PersonalTool API文档
+    description: 个人工具集后端API接口文档
+    version: 1.0.0
+    contact:
+      name: Developer
+    license: MIT
+    license-url: https://opensource.org/licenses/MIT
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.personal: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{50} - %msg%n"
+  file:
+    name: logs/application.log
+    max-size: 10MB
+    max-history: 30
+
