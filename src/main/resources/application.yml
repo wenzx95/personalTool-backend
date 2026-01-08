@@ -21,10 +21,11 @@ spring:
       max-lifetime: 1800000
   
   # Caffeine缓存配置
-  cache:
-    type: caffeine
-    caffeine:
-      spec: maximumSize=1000,expireAfterWrite=10m
+  # 暂时注释，避免配置问题
+  # cache:
+  #   type: caffeine
+  #   caffeine:
+  #     spec: maximumSize=1000,expireAfterWrite=10m
 
 # MyBatis Plus配置
 mybatis-plus:
@@ -49,10 +50,14 @@ app:
   encryption:
     key: ${APP_ENCRYPTION_KEY:your-encryption-key-32-chars-long}
 
-# Python服务地址
+# Python服务配置
 python:
-  service:
-    url: ${PYTHON_SERVICE_URL:http://python-service:8000}
+  stock-service:
+    base-url: ${PYTHON_STOCK_SERVICE_URL:http://localhost:8000}
+    timeout: 60000  # 60秒超时，Python数据采集可能需要较长时间
+    retry:
+      max-attempts: 3
+      delay: 1000  # 重试延迟1秒
 
 # Knife4j配置
 knife4j:

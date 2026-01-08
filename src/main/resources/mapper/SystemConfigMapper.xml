@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personal.mapper.SystemConfigMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.personal.entity.SystemConfig">
+        <id column="id" property="id"/>
+        <result column="config_key" property="configKey"/>
+        <result column="config_value" property="configValue"/>
+        <result column="config_type" property="configType"/>
+        <result column="category" property="category"/>
+        <result column="description" property="description"/>
+        <result column="is_active" property="isActive"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, config_key, config_value, config_type, category, description, is_active, created_at, updated_at
+    </sql>
+
+    <!-- 根据配置键查询 -->
+    <select id="selectByConfigKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE config_key = #{configKey}
+    </select>
+
+    <!-- 查询所有启用的配置 -->
+    <select id="selectAllActive" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE is_active = 1
+        ORDER BY category, config_key
+    </select>
+
+    <!-- 根据分类查询配置 -->
+    <select id="selectByCategory" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE category = #{category}
+        ORDER BY config_key
+    </select>
+
+    <!-- 根据分类查询启用的配置 -->
+    <select id="selectActiveByCategory" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM system_config
+        WHERE category = #{category}
+        AND is_active = 1
+        ORDER BY config_key
+    </select>
+
+    <!-- 更新配置值 -->
+    <update id="updateConfigValue">
+        UPDATE system_config
+        SET config_value = #{configValue},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE config_key = #{configKey}
+    </update>
+
+    <!-- 插入配置 -->
+    <insert id="insert" parameterType="com.personal.entity.SystemConfig">
+        INSERT INTO system_config (
+        config_key, config_value, config_type, category, description, is_active
+        ) VALUES (
+        #{configKey}, #{configValue}, #{configType}, #{category}, #{description}, #{isActive}
+        )
+    </insert>
+
+    <!-- 删除配置 -->
+    <delete id="deleteByConfigKey">
+        DELETE FROM system_config
+        WHERE config_key = #{configKey}
+    </delete>
+
+</mapper>

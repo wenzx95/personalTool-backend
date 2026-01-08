@@ -8,16 +8,16 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.6</version>
         <relativePath/>
     </parent>
-    
+
     <groupId>com.personalTool</groupId>
     <artifactId>personalTool-backend</artifactId>
     <version>1.0.0</version>
     <name>PersonalTool Backend</name>
     <description>个人工具集后端服务 - Spring Boot</description>
-    
+
     <properties>
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
@@ -25,8 +25,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <jwt.version>0.12.3</jwt.version>
+        <spring-ai-alibaba.version>1.0.0-M2</spring-ai-alibaba.version>
     </properties>
-    
+
+    <!-- Spring AI Maven 仓库 -->
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>aliyun-maven</id>
+            <name>Aliyun Maven</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Spring Boot Web -->
         <dependency>
@@ -35,10 +53,13 @@
         </dependency>
         
         <!-- Spring Boot Security -->
+        <!-- 暂时注释，解决依赖冲突 -->
+        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        -->
         
         <!-- Spring Boot Validation -->
         <dependency>
@@ -91,20 +112,33 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        
+
         <!-- Swagger/Knife4j -->
+        <!-- 暂时注释，可能存在兼容性问题 -->
+        <!--
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
             <version>4.4.0</version>
         </dependency>
+        -->
         
         <!-- HTTP Client -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        
+
+        <!-- Spring AI Alibaba (可选，用于AI功能) -->
+        <!-- 暂时注释，需要单独配置 -->
+        <!--
+        <dependency>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter</artifactId>
+            <version>${spring-ai-alibaba.version}</version>
+        </dependency>
+        -->
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
