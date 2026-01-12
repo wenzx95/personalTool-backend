@@ -1,7 +1,7 @@
-package com.personal.service;
+package com.personal.market.service;
 
-import com.personal.dto.market.CreateReviewRequest;
-import com.personal.dto.market.MarketReviewData;
+import com.personal.market.dto.CreateReviewRequest;
+import com.personal.market.dto.MarketReviewData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -145,7 +145,7 @@ public class PythonStockService {
      * @param request 更新请求
      * @return 更新后的复盘记录
      */
-    public Mono<MarketReviewData> updateReview(Long reviewId, com.personal.dto.market.UpdateReviewRequest request) {
+    public Mono<MarketReviewData> updateReview(Long reviewId, com.personal.market.dto.UpdateReviewRequest request) {
         log.info("调用Python服务更新复盘记录，ID: {}", reviewId);
 
         return webClient.put()

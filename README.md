@@ -29,12 +29,58 @@
 
 ### 配置
 
-1. 复制 `application.yml` 并配置数据库连接
-2. 设置环境变量：
-   - `DB_USERNAME`: 数据库用户名
-   - `DB_PASSWORD`: 数据库密码
-   - `JWT_SECRET`: JWT密钥
-   - `APP_ENCRYPTION_KEY`: 数据加密密钥（32位）
+#### 方式一：使用环境变量（推荐）
+
+1. 复制 `.env.example` 为 `.env`：
+   ```bash
+   cp .env.example .env
+   ```
+
+2. 编辑 `.env` 文件，填入实际配置：
+   ```env
+   # 数据库配置
+   DB_URL=jdbc:mysql://localhost:3306/db_personal?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+   DB_USERNAME=root
+   DB_PASSWORD=your-database-password
+
+   # JWT密钥（至少32个字符）
+   JWT_SECRET=your-jwt-secret-key-at-least-32-characters-long
+
+   # 加密密钥（必须是32个字符）
+   APP_ENCRYPTION_KEY=your-encryption-key-must-be-32-chars
+
+   # Python服务地址
+   PYTHON_STOCK_SERVICE_URL=http://localhost:8000
+   ```
+
+3. 在 IDE 或启动脚本中加载环境变量：
+   - **IDEA**: Run Configuration -> Environment Variables
+   - **命令行**: 使用 `dotenv-maven-plugin` 或手动导出变量
+
+#### 方式二：使用本地配置文件
+
+1. 复制 `application-local.yml.example` 为 `application-local.yml`：
+   ```bash
+   cp src/main/resources/application-local.yml.example src/main/resources/application-local.yml
+   ```
+
+2. 编辑 `application-local.yml`，填入实际配置值
+
+3. 激活本地配置：
+   ```bash
+   mvn spring-boot:run -Dspring-boot.run.profiles=local
+   ```
+
+#### 必需的环境变量
+
+| 变量名 | 说明 | 示例 |
+|--------|------|------|
+| `DB_URL` | 数据库连接地址 | `jdbc:mysql://localhost:3306/db_personal?...` |
+| `DB_USERNAME` | 数据库用户名 | `root` |
+| `DB_PASSWORD` | 数据库密码 | `your-password` |
+| `JWT_SECRET` | JWT密钥（至少32字符） | `abc123...` |
+| `APP_ENCRYPTION_KEY` | 加密密钥（必须32字符） | `12345678901234567890123456789012` |
+| `PYTHON_STOCK_SERVICE_URL` | Python服务地址 | `http://localhost:8000` |
 
 ### 运行
 

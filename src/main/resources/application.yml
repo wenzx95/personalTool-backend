@@ -10,9 +10,9 @@ spring:
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/personal_tool?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
@@ -27,33 +27,27 @@ spring:
   #   caffeine:
   #     spec: maximumSize=1000,expireAfterWrite=10m
 
-# MyBatis Plus配置
-mybatis-plus:
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath*:/mapper/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      id-type: auto
-      logic-delete-field: deleted
-      logic-delete-value: 1
-      logic-not-delete-value: 0
-  mapper-locations: classpath*:/mapper/**/*.xml
 
 # JWT配置
 jwt:
-  secret: ${JWT_SECRET:your-secret-key-change-in-production-32-chars}
+  secret: ${JWT_SECRET}
   expiration: 86400000 # 24小时，单位：毫秒
 
 # 加密配置
 app:
   encryption:
-    key: ${APP_ENCRYPTION_KEY:your-encryption-key-32-chars-long}
+    key: ${APP_ENCRYPTION_KEY}
 
 # Python服务配置
 python:
   stock-service:
-    base-url: ${PYTHON_STOCK_SERVICE_URL:http://localhost:8000}
+    base-url: ${PYTHON_STOCK_SERVICE_URL}
     timeout: 60000  # 60秒超时，Python数据采集可能需要较长时间
     retry:
       max-attempts: 3

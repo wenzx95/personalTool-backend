@@ -1,10 +1,10 @@
-package com.personal.controller;
+package com.personal.market.controller;
 
 import com.personal.common.Result;
-import com.personal.dto.market.CreateReviewRequest;
-import com.personal.dto.market.MarketReviewData;
-import com.personal.dto.market.UpdateReviewRequest;
-import com.personal.service.PythonStockService;
+import com.personal.market.dto.CreateReviewRequest;
+import com.personal.market.dto.MarketReviewData;
+import com.personal.market.dto.UpdateReviewRequest;
+import com.personal.market.service.PythonStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

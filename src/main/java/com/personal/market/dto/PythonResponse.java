@@ -1,4 +1,4 @@
-package com.personal.dto.market;
+package com.personal.market.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

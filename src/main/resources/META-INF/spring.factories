@@ -1,2 +1,3 @@
-org.springframework.context.ApplicationContextInitializer=\
-com.personal.config.properties.DatabaseConfigInitializer
+# 暂时禁用DatabaseConfigInitializer
+# org.springframework.context.ApplicationContextInitializer=\
+# com.personal.config.properties.DatabaseConfigInitializer

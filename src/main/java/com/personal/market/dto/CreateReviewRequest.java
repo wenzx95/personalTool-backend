@@ -1,14 +1,19 @@
-package com.personal.dto.market;
+package com.personal.market.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * 更新复盘请求DTO
+ * 创建复盘请求DTO
  */
 @Data
-public class UpdateReviewRequest {
+public class CreateReviewRequest {
+
+    /**
+     * 日期 (YYYY-MM-DD格式)
+     */
+    private String date;
 
     /**
      * 热门板块列表

@@ -1,0 +1,36 @@
+# 本地开发环境配置示例
+# 复制此文件为 application-local.yml 并填入实际配置值
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_personal?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: your-database-password
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+# JWT配置
+jwt:
+  secret: your-jwt-secret-key-at-least-32-characters-long
+  expiration: 86400000
+
+# 加密配置
+app:
+  encryption:
+    key: your-encryption-key-must-be-32-chars
+
+# Python服务配置
+python:
+  stock-service:
+    base-url: http://localhost:8000
+    timeout: 60000
+    retry:
+      max-attempts: 3
+      delay: 1000
