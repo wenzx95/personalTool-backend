@@ -1,4 +1,4 @@
-package com.personal.common;
+package com.personal.common.dto;
 
 import lombok.Data;
 import java.io.Serializable;

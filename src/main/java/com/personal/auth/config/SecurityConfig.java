@@ -1,5 +1,6 @@
 package com.personal.auth.config;
 
+import com.personal.auth.filter.JwtAuthenticationFilter;
 import com.personal.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class SecurityConfig {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
      * 密码编码器
@@ -80,17 +85,12 @@ public class SecurityConfig {
                         // 允许访问的接口
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/api/auth/profile").permitAll()
-                        .requestMatchers("/api/auth/menus").permitAll()
-                        .requestMatchers("/api/auth/menus/**").permitAll()
-                        .requestMatchers("/api/auth/roles").permitAll()
-                        .requestMatchers("/api/auth/roles/**").permitAll()
-                        .requestMatchers("/api/auth/users").permitAll()
-                        .requestMatchers("/api/auth/users/**").permitAll()
                         .requestMatchers("/api/init/**").permitAll()
                         // 其他接口需要认证
                         .anyRequest().authenticated()
-                );
+                )
+                // 添加 JWT 认证过滤器
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,6 +1,6 @@
 package com.personal.market.controller;
 
-import com.personal.common.Result;
+import com.personal.common.dto.Result;
 import com.personal.market.dto.CreateReviewRequest;
 import com.personal.market.dto.MarketReviewData;
 import com.personal.market.dto.UpdateReviewRequest;
