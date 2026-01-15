@@ -86,6 +86,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/init/**").permitAll()
+                        .requestMatchers("/api/version").permitAll()
+                        .requestMatchers("/api/health").permitAll()
                         // 其他接口需要认证
                         .anyRequest().authenticated()
                 )

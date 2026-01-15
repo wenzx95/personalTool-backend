@@ -1,9 +1,12 @@
 package com.personal.task.service.executor.ai;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.personal.system.config.service.SystemConfigService;
 import com.personal.system.log.entity.SystemLog;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -34,11 +37,14 @@ public class ZhipuAIService implements AIPlatformService {
     @Value("${ai.zhipu.temperature:0.10}")
     private Double temperature;
 
+    @Autowired(required = false)
+    private SystemConfigService configService;
+
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    // 保活提示词池
-    private static final List<String> KEEPALIVE_PROMPTS = Arrays.asList(
+    // 默认保活提示词池（当配置不存在时使用）
+    private static final List<String> DEFAULT_KEEPALIVE_PROMPTS = Arrays.asList(
         "1+1=?",
         "北京是中国的首都吗？",
         "今天的日期是？",
@@ -64,7 +70,8 @@ public class ZhipuAIService implements AIPlatformService {
 
         // 如果没有指定prompt，随机选择一个
         if (prompt == null || prompt.isEmpty()) {
-            prompt = KEEPALIVE_PROMPTS.get(new Random().nextInt(KEEPALIVE_PROMPTS.size()));
+            List<String> prompts = getKeepAlivePrompts();
+            prompt = prompts.get(new Random().nextInt(prompts.size()));
         }
 
         try {
@@ -179,5 +186,31 @@ public class ZhipuAIService implements AIPlatformService {
             return "sk-****";
         }
         return "sk-****" + apiKey.substring(apiKey.length() - 4);
+    }
+
+    /**
+     * 获取保活提示词列表
+     * 优先从配置文件读取，如果不存在则使用默认列表
+     */
+    private List<String> getKeepAlivePrompts() {
+        // 尝试从配置读取
+        if (configService != null) {
+            try {
+                String promptsJson = configService.getConfigValue("ai.zhipu.prompts", null);
+                if (promptsJson != null && !promptsJson.trim().isEmpty()) {
+                    List<String> prompts = objectMapper.readValue(promptsJson, new TypeReference<List<String>>() {});
+                    if (prompts != null && !prompts.isEmpty()) {
+                        log.debug("使用配置的保活提示词，共 {} 个", prompts.size());
+                        return prompts;
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("解析配置的提示词失败，使用默认列表：{}", e.getMessage());
+            }
+        }
+
+        // 使用默认列表
+        log.debug("使用默认保活提示词，共 {} 个", DEFAULT_KEEPALIVE_PROMPTS.size());
+        return DEFAULT_KEEPALIVE_PROMPTS;
     }
 }

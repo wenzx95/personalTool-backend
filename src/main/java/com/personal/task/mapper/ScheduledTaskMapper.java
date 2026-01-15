@@ -68,6 +68,29 @@ public interface ScheduledTaskMapper extends BaseMapper<ScheduledTask> {
                              @Param("status") String status);
 
     /**
+     * 更新任务配置
+     */
+    @Update("UPDATE scheduled_task SET " +
+            "task_name = #{taskName}, " +
+            "description = #{description}, " +
+            "cron_expression = #{cronExpression}, " +
+            "executor_params = #{executorParams}, " +
+            "updated_at = NOW() " +
+            "WHERE task_code = #{taskCode}")
+    int updateTask(ScheduledTask task);
+
+    /**
+     * 创建新任务
+     */
+    int insert(ScheduledTask task);
+
+    /**
+     * 删除任务
+     */
+    @Update("UPDATE scheduled_task SET enabled = 0, updated_at = NOW() WHERE task_code = #{taskCode}")
+    int softDelete(@Param("taskCode") String taskCode);
+
+    /**
      * 统计各类型任务数量
      */
     @Select("SELECT task_type, COUNT(*) as count FROM scheduled_task GROUP BY task_type")

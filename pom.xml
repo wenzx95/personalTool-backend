@@ -146,6 +146,34 @@
     
     <build>
         <plugins>
+            <!-- 生成构建信息文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-build-info</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <tstamp>
+                                    <format property="build.time" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                    <format property="build.timestamp" pattern="yyyyMMddHHmmss"/>
+                                </tstamp>
+                                <echo file="${project.build.outputDirectory}/build-info.properties">
+build.timestamp=${build.timestamp}
+build.time=${build.time}
+build.version=${project.version}
+                                </echo>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -81,6 +81,49 @@ public class ScheduledTaskService {
     }
 
     /**
+     * 更新任务配置
+     */
+    public void updateTask(ScheduledTask task) {
+        int updated = taskMapper.updateTask(task);
+        if (updated > 0) {
+            log.info("任务 {} 配置已更新", task.getTaskCode());
+        } else {
+            throw new RuntimeException("任务更新失败：任务不存在");
+        }
+    }
+
+    /**
+     * 创建新任务
+     */
+    public void createTask(ScheduledTask task) {
+        // 检查任务代码是否已存在
+        ScheduledTask existing = taskMapper.findByTaskCode(task.getTaskCode());
+        if (existing != null) {
+            throw new RuntimeException("任务代码已存在：" + task.getTaskCode());
+        }
+
+        // 初始化统计字段
+        task.setTotalExecutions(0);
+        task.setSuccessExecutions(0);
+        task.setFailedExecutions(0);
+
+        int inserted = taskMapper.insert(task);
+        if (inserted > 0) {
+            log.info("新任务 {} 创建成功", task.getTaskCode());
+        } else {
+            throw new RuntimeException("任务创建失败");
+        }
+    }
+
+    /**
+     * 删除任务（软删除）
+     */
+    public void deleteTask(String taskCode) {
+        taskMapper.softDelete(taskCode);
+        log.info("任务 {} 已禁用（软删除）", taskCode);
+    }
+
+    /**
      * 获取任务统计信息
      */
     public Map<String, Object> getTaskStats() {
