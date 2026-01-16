@@ -17,7 +17,7 @@ import java.util.List;
  * 提供市场复盘数据的CRUD接口
  */
 @RestController
-@RequestMapping("/api/v1/market")
+@RequestMapping("/api/market")
 @Slf4j
 public class MarketReviewController {
 
@@ -51,8 +51,12 @@ public class MarketReviewController {
         return pythonStockService.getReviewList(limit, offset)
                 .map(data -> {
                     log.info("成功获取复盘列表，共 {} 条记录", data.size());
-                    return Result.success(data);
+                    Result<List<MarketReviewData>> result = Result.success(data);
+                    log.info("准备返回响应，code: {}, message: {}, data size: {}", result.getCode(), result.getMessage(), result.getData() != null ? result.getData().size() : 0);
+                    return result;
                 })
+                .doOnSuccess(result -> log.info("响应成功返回: code={}, message={}", result.getCode(), result.getMessage()))
+                .doOnError(error -> log.error("处理请求时发生错误", error))
                 .onErrorResume(e -> {
                     log.error("获取复盘列表失败", e);
                     return Mono.just(Result.error("获取复盘列表失败: " + e.getMessage()));

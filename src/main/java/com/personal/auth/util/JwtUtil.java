@@ -111,10 +111,14 @@ public class JwtUtil {
      * @return Claims
      */
     private Claims getClaimsFromToken(String token) {
+        // 去除token中的所有非打印字符、无效字符和控制字符
+        String cleanToken = token.replaceAll("[^\\x20-\\x7E]", "").trim().replaceAll("\\s+", "");
+        System.out.println("Clean token: " + cleanToken);
+        System.out.println("Token length after cleaning: " + cleanToken.length());
         return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
-                .parseSignedClaims(token)
+                .parseSignedClaims(cleanToken)
                 .getPayload();
     }
 

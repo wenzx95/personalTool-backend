@@ -52,6 +52,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(tokenPrefix)) {
             jwtToken = authHeader.substring(tokenPrefix.length());
             log.info("JWT Filter - Token extracted, length: {}", jwtToken.length());
+            // 去除token中的所有非打印字符和无效字符
+            jwtToken = jwtToken.replaceAll("\\p{Cntrl}", "").trim().replaceAll("\\s+", "");
+            log.info("JWT Filter - Token cleaned, length: {}", jwtToken.length());
             try {
                 username = jwtUtil.getUsernameFromToken(jwtToken);
                 log.info("JWT Filter - Username extracted: {}", username);
@@ -81,14 +84,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                     log.info("JWT 认证成功: {}", username);
                 } else {
-                    log.warn("JWT Token 已过期: {}", username);
+                    log.warn("JWT Token 已过期: {}, 请求URI: {}", username, requestURI);
+                    // Token过期时，清除SecurityContext，让Spring Security返回401而不是403
+                    SecurityContextHolder.clearContext();
                 }
             } catch (Exception e) {
-                log.error("JWT 认证失败: {}", e.getMessage());
+                log.error("JWT 认证失败: {}, 请求URI: {}", e.getMessage(), requestURI);
+                // 认证失败时，清除SecurityContext
+                SecurityContextHolder.clearContext();
             }
         } else {
-            log.info("JWT Filter - Authentication already exists or username is null, auth: {}",
-                SecurityContextHolder.getContext().getAuthentication());
+            if (username == null && authHeader != null && authHeader.startsWith(tokenPrefix)) {
+                log.warn("JWT Filter - Token无效或无法解析，请求URI: {}", requestURI);
+            } else {
+                log.info("JWT Filter - Authentication already exists or username is null, auth: {}",
+                    SecurityContextHolder.getContext().getAuthentication());
+            }
         }
 
         filterChain.doFilter(request, response);
