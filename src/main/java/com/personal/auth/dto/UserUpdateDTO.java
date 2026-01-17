@@ -52,4 +52,9 @@ public class UserUpdateDTO {
      * 备注
      */
     private String remark;
+
+    /**
+     * 菜单权限ID列表（逗号分隔）
+     */
+    private String menuIds;
 }

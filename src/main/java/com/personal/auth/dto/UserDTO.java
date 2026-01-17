@@ -75,4 +75,9 @@ public class UserDTO {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
+
+    /**
+     * 菜单权限ID列表（逗号分隔）
+     */
+    private String menuIds;
 }

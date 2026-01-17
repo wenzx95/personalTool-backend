@@ -68,10 +68,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 // 验证 token 是否过期
                 if (!jwtUtil.isTokenExpired(jwtToken)) {
-                    // 创建认证对象
+                    // 从token中获取userId
+                    Long userId = jwtUtil.getUserIdFromToken(jwtToken);
+
+                    // 创建认证对象，将userId放入principal中
                     UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
-                            username,
+                            userId,  // principal直接使用userId
                             null,
                             Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                         );
@@ -82,7 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     // 设置到 Security Context
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                    log.info("JWT 认证成功: {}", username);
+                    log.info("JWT 认证成功: userId={}, username={}", userId, username);
                 } else {
                     log.warn("JWT Token 已过期: {}, 请求URI: {}", username, requestURI);
                     // Token过期时，清除SecurityContext，让Spring Security返回401而不是403

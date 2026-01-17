@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
-@MapperScan({"com.personal.auth.mapper", "com.personal.market.mapper", "com.personal.system.config.mapper", "com.personal.system.log.mapper", "com.personal.system.data.mapper", "com.personal.task.mapper"})
+@MapperScan("com.personal.**.mapper")
 public class BackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(BackendApplication.class, args);

@@ -21,10 +21,10 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkw}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:86400000}")
     private long expiration;
 
     /**
